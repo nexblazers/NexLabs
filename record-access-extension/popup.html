@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Record Access Inspector</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Record Access Inspector</h1>
+      <button id="openTab" class="link" type="button" title="Open in a full browser tab">Open in tab ↗</button>
+    </header>
+
+    <p id="context" class="muted" aria-live="polite">Connecting to org…</p>
+
+    <form id="form" autocomplete="off">
+      <div class="field">
+        <label for="userId">User Id</label>
+        <div class="row">
+          <input id="userId" placeholder="005…" maxlength="18" required spellcheck="false" />
+          <button id="useMe" type="button" class="secondary" title="Use the logged-in user's Id">Me</button>
+        </div>
+      </div>
+      <div class="field">
+        <label for="recordId">Record Id</label>
+        <input id="recordId" placeholder="001…, 006…, a0X…" maxlength="18" required spellcheck="false" />
+      </div>
+      <button id="check" type="submit" disabled>Check access</button>
+    </form>
+
+    <p id="status" class="muted" role="status" aria-live="polite"></p>
+    <div id="error" class="error" role="alert" hidden></div>
+    <main id="results" hidden></main>
+
+    <script type="module" src="popup.js"></script>
+  </body>
+</html>
