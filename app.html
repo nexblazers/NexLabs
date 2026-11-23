@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Package Blocker Finder · NexBlazers</title>
+  <link rel="icon" href="icons/icon32.png">
+  <link rel="stylesheet" href="app.css">
+</head>
+<body>
+  <header class="top">
+    <a class="brand" href="https://nexblazers.vercel.app" target="_blank" rel="noopener" title="NexBlazers">
+      <img class="mark" src="brand/mark-white.png" alt="NexBlazers">
+      <span class="titles">
+        <span class="app">Package Blocker <span class="acc">Finder</span></span>
+        <span class="by">by NexBlazers</span>
+      </span>
+    </a>
+    <div id="orgInfo" class="org">Connecting…</div>
+  </header>
+
+  <main>
+    <section class="card" id="setup">
+      <div class="modes" role="tablist">
+        <button class="mode active" data-mode="managed">Managed package</button>
+        <button class="mode" data-mode="unmanaged">Unmanaged package</button>
+        <button class="mode" data-mode="custom">Specific components</button>
+      </div>
+
+      <div class="panel" data-panel="managed">
+        <label>Installed package
+          <select id="pkgSelect"><option value="">Loading…</option></select>
+        </label>
+        <label>Namespace
+          <input id="nsInput" placeholder="e.g. npsp" spellcheck="false">
+        </label>
+      </div>
+      <div class="panel hidden" data-panel="unmanaged">
+        <label class="wide">Package name
+          <input id="pkgName" list="pkgNames" placeholder="Exact name from Setup → Package Manager" spellcheck="false">
+          <datalist id="pkgNames"></datalist>
+        </label>
+        <p class="hint">Deleting an unmanaged package only removes the container; its components stay. This mode lists the package's components, finds everything blocking their deletion, and gives you one ordered plan.</p>
+      </div>
+      <div class="panel hidden" data-panel="custom">
+        <label class="wide">Component IDs (one per line)
+          <textarea id="idsInput" rows="4" spellcheck="false" placeholder="00N5g00000ABCDe&#10;01p5g00000XYZab"></textarea>
+        </label>
+        <p class="hint">Find the full chain of everything blocking deletion of these components (fields, classes, flows…).</p>
+      </div>
+
+      <div class="options">
+        <label class="chk" data-only="managed"><input type="checkbox" id="optText" checked> Text scan (Apex, Visualforce, email templates, workflow rules) — catches references the Dependency API misses</label>
+        <label class="chk" data-only="managed"><input type="checkbox" id="optListViews"> Include list views (slow in big orgs)</label>
+        <label class="chk"><input type="checkbox" id="optReports" checked> Reports &amp; dashboards — reads report definitions (columns, filters, groupings, cross filters, report type) and finds dashboards on reports you delete</label>
+        <label class="chk"><input type="checkbox" id="optReportTypes" checked> Custom report types</label>
+        <label class="chk"><input type="checkbox" id="optBulk"> Bulk API deep scan — dependency data at every level, incl. reports (slower)</label>
+        <label class="inline">Max depth <input type="number" id="optDepth" value="8" min="1" max="25"></label>
+        <label class="inline">Reports to check
+          <select id="optReportScope">
+            <option value="related" selected>Related to the package's objects (fast)</option>
+            <option value="all">All reports (slow, many API calls)</option>
+          </select>
+        </label>
+        <label class="chk" id="childWrap"><input type="checkbox" id="optChildReports" checked> Include reports on child objects (lookups show parent fields)</label>
+        <label class="inline hidden" id="capWrap">Max reports <input type="number" id="optReportCap" value="3000" min="100" max="50000" step="500" style="width:84px"></label>
+      </div>
+
+      <div class="actions">
+        <button id="scanBtn" class="primary" disabled>Find all blockers</button>
+        <span id="status" class="status"></span>
+      </div>
+    </section>
+
+    <section id="results" class="hidden">
+      <div id="summary" class="summary"></div>
+      <div id="notes" class="notes hidden"></div>
+      <div id="warnings" class="warnings hidden"></div>
+
+      <div class="toolbar">
+        <input id="filter" placeholder="Filter by name or type…" spellcheck="false">
+        <select id="actionFilter">
+          <option value="">All actions</option>
+          <option value="delete">Delete</option>
+          <option value="modify">Modify</option>
+          <option value="other-package">Other package</option>
+        </select>
+        <label class="chk"><input type="checkbox" id="hideDone"> Hide done</label>
+        <span class="spacer"></span>
+        <button id="rescanBtn" title="Re-run the full scan and show what changed">↻ Re-scan</button>
+        <button id="csvBtn">Export CSV</button>
+        <button id="printBtn">Print / PDF</button>
+        <button id="zipBtn" title="package.xml + destructiveChanges.xml for every Delete row">Download destructive zip</button>
+        <button id="deployBtn" class="danger">Deploy all deletes…</button>
+      </div>
+
+      <div class="table-wrap">
+        <table id="plan">
+          <thead>
+            <tr>
+              <th title="Done">✓</th><th>#</th><th>Level</th><th>Type</th><th>Component</th>
+              <th>References</th><th>Action</th><th>What to do</th><th>Links</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <p class="legend">Fix top to bottom. Each row is ordered before anything it references. <b>Level</b> = how far from the package (L1 references it directly; L2 blocks deleting an L1 row, …). Change any row's <b>Action</b> and the chain below it updates.</p>
+    </section>
+
+    <details class="card log">
+      <summary>Scan log</summary>
+      <pre id="log"></pre>
+    </details>
+  </main>
+
+  <footer class="ftr">
+    <a href="https://nexblazers.vercel.app" target="_blank" rel="noopener"><img src="brand/wordmark-white.png" alt="NexBlazers"></a>
+    <span class="made">Built by NexBlazers · <a href="https://nexblazers.vercel.app" target="_blank" rel="noopener">nexblazers.vercel.app</a></span>
+    <span class="tag">Learn. Build. Grow.</span>
+  </footer>
+  <div class="print-brand">Package Blocker Finder by NexBlazers · nexblazers.vercel.app</div>
+
+  <div id="modal" class="modal hidden">
+    <div class="modal-box">
+      <h3 id="modalTitle"></h3>
+      <div id="modalBody"></div>
+      <div id="modalActions" class="modal-actions"></div>
+    </div>
+  </div>
+  <div id="toast" class="toast hidden"></div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
