@@ -1,0 +1,22 @@
+[
+  {
+    "name": "Record Access Inspector",
+    "slug": "record-access-inspector",
+    "type": "chrome-extension",
+    "description": "Explains whether a user can Read / Edit / Delete a Salesforce record, and every sharing path that grants that access.",
+    "path": "chrome-extensions/record-access-inspector",
+    "version": "1.0.0",
+    "status": "beta",
+    "browsers": ["chrome", "edge"]
+  },
+  {
+    "name": "Package Blocker Finder",
+    "slug": "package-blocker-finder",
+    "type": "chrome-extension",
+    "description": "Finds the whole chain of components blocking a Salesforce package uninstall or delete, in fix order, with direct links and one-click deletes.",
+    "path": "chrome-extensions/package-blocker-finder",
+    "version": "0.4.0",
+    "status": "beta",
+    "browsers": ["chrome", "edge"]
+  }
+]

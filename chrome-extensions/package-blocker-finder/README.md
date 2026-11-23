@@ -8,7 +8,7 @@ This extension finds the **whole chain at once**, puts it in the order you need 
 a "Delete now" button where possible, and a one-shot destructive deploy.
 
 ## Install (developer mode)
-1. Unzip this folder.
+1. Download the zip from [Releases](https://github.com/nexblazers/NexLabs/releases) and unzip it, or clone this repo and use the `chrome-extensions/package-blocker-finder` folder.
 2. Chrome → `chrome://extensions` → turn on **Developer mode** → **Load unpacked** → pick the folder.
 3. Log in to your org, open any Salesforce tab, click the extension icon → **Open for this org**.
    (On Installed Packages pages there is also a floating **⛓ Find all blockers** button.)

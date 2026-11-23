@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    @font-face { font-family: Montserrat; font-weight: 800; src: url(fonts/montserrat-latin-800-normal.woff2) format("woff2"); }
+    @font-face { font-family: Montserrat; font-weight: 700; src: url(fonts/montserrat-latin-700-normal.woff2) format("woff2"); }
+    body { font: 13px system-ui, sans-serif; width: 300px; margin: 0; color: #0b2a5b; background: #f5faff; }
+    .hd { display: flex; align-items: center; gap: 10px; padding: 12px 14px; background: linear-gradient(90deg, #0b2a5b, #0a5bd8); color: #fff; }
+    .hd img { height: 30px; }
+    .hd .t { font: 800 14px Montserrat, sans-serif; line-height: 1.15; }
+    .hd .b { font: 700 10px Montserrat, sans-serif; letter-spacing: .12em; text-transform: uppercase; opacity: .85; }
+    .bd { padding: 14px; }
+    p { margin: 0 0 12px; color: #4b6b97; line-height: 1.4; }
+    button { width: 100%; padding: 10px; border: 0; border-radius: 10px; background: linear-gradient(90deg, #1e9bff, #0a5bd8); color: #fff; font: 800 13px Montserrat, sans-serif; cursor: pointer; }
+    button:disabled { background: #9fb3cc; cursor: not-allowed; }
+    .org { font-size: 11px; color: #4b6b97; margin-top: 8px; word-break: break-all; }
+    .ft { display: flex; justify-content: space-between; align-items: center; padding: 8px 14px; border-top: 1px solid #d6e6fa; font-size: 11px; color: #4b6b97; }
+    .ft a { color: #0a5bd8; text-decoration: none; font-weight: 600; }
+    .ft i { font: italic 700 11px Montserrat, sans-serif; }
+  </style>
+</head>
+<body>
+  <div class="hd">
+    <img src="brand/mark-white.png" alt="NexBlazers">
+    <div><div class="t">Package Blocker Finder</div><div class="b">by NexBlazers</div></div>
+  </div>
+  <div class="bd">
+    <p id="msg">Finds every component blocking a package uninstall or delete, in the order to fix them.</p>
+    <button id="open" disabled>Open for this org</button>
+    <div class="org" id="org"></div>
+  </div>
+  <div class="ft"><a href="https://nexblazers.vercel.app" target="_blank" rel="noopener">nexblazers.vercel.app</a><i>Learn. Build. Grow.</i></div>
+  <script src="popup.js"></script>
+</body>
+</html>

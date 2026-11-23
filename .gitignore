@@ -1,0 +1,8 @@
+# Built extension zips go on GitHub Releases, not in the repo
+*.zip
+*.crx
+*.pem
+
+node_modules/
+.DS_Store
+Thumbs.db
