@@ -1,46 +1,38 @@
-Salesforce Record Access Inspector
+# NexLabs 🧪
 
-A Chrome / Edge extension (Manifest V3). You give it a User Id and a Record Id, and it tells you:
+Free Salesforce tools, browser extensions and hacks by [NexBlazers](https://nexblazers.vercel.app): *Learn. Build. Grow.*
 
-    whether the user can Read / Edit / Delete / Transfer the record, or has Full access to it
-    why: every path that grants access (owner, queue, role hierarchy, org-wide default, sharing rules, manual or Apex shares, teams, View All / Modify All, parent record)
-    every share row on the record, who it is shared with, and whether that row applies to the user
-    the user's object permissions, and which profile or permission set grants each one
+Every tool lives in its own folder with its own README and version. The list below is also published as [`tools.json`](tools.json), so the NexBlazers site can show it automatically.
 
-How it authenticates
+## Tools
 
-The extension reuses the Salesforce session already open in your browser (the sid cookie). It does not use a connected app and asks for no password. Every query runs as you, with your permissions. The session id stays in memory and is never stored or sent anywhere except your own org's API.
-Install (unpacked)
+| Tool | Type | Version | What it does |
+|------|------|---------|--------------|
+| [Record Access Inspector](chrome-extensions/record-access-inspector) | Chrome / Edge extension | 1.0.0 | Tells you whether a user can Read / Edit / Delete a record, and *why*: owner, role hierarchy, sharing rules, manual shares, permission sets. |
+| [Package Blocker Finder](chrome-extensions/package-blocker-finder) | Chrome / Edge extension | 0.4.0 | Finds the whole chain of components blocking a package uninstall or delete, in the order you need to fix them. |
 
-    Open chrome://extensions (or edge://extensions) and turn on Developer mode.
-    Click Load unpacked and select this record-access-extension folder.
-    Pin the extension.
+## Repo layout
 
-Use
+```
+chrome-extensions/   browser extensions (Manifest V3)
+vscode-extensions/   VS Code extensions          (coming soon)
+sfdx/                LWC, Apex and metadata tools (coming soon)
+scripts/             CLI scripts and bookmarklets (coming soon)
+tools.json           machine-readable catalog of every tool
+```
 
-    Open any page in your Salesforce org. On a record page, the Record Id is filled in for you.
-    Click the extension icon, enter the User Id (005…), and click Check access. Me fills in your own Id.
-    Open in tab shows the results in a full browser tab.
-    If the record's access comes from a parent record (Controlled by Parent / master-detail), click Inspect parent.
+## Installing an extension
 
-How it works
-Step 	API used
-Final access answer 	UserRecordAccess (HasRead/Edit/Delete/Transfer/AllAccess, MaxAccessLevel)
-Object type 	Global describe, matched on the key prefix
-Org-wide defaults 	EntityDefinition.InternalSharingModel / ExternalSharingModel
-Owner, name, parent 	SOQL on the record, plus describe for master-detail fields
-Share rows 	<Object>Share / <Custom>__Share
-Groups the user belongs to 	GroupMember (direct and nested), role / role-and-subordinates groups, All Internal Users
-Role hierarchy 	UserRole
-System and object permissions 	PermissionSetAssignment (includes the profile), ObjectPermissions
+1. Download the tool's zip from [Releases](https://github.com/nexblazers/NexLabs/releases) and unzip it, or clone this repo.
+2. Open `chrome://extensions` (or `edge://extensions`) and turn on **Developer mode**.
+3. Click **Load unpacked** and pick the tool's folder.
 
-The effective verdict combines sharing (UserRecordAccess) with object permissions. If sharing grants access but the user has no object Read permission, the verdict says so.
-Permissions your login needs
+All NexLabs extensions use the Salesforce session already open in your browser. Nothing is installed in your org, and no data leaves your browser except calls to your own org's API.
 
-    View Setup and Configuration: to read roles, groups, permission sets and org-wide defaults.
-    View All Data (recommended): without it you only see share rows and records that you can see yourself. Anything the extension could not read is listed under Notes & limitations.
+## Adding a new tool
 
-Known limitations
-
-    For custom objects, it assumes Grant Access Using Hierarchies is enabled when it reports role-hierarchy access (the API does not expose this setting). The verdict itself always comes from UserRecordAccess.
-    It does not resolve in detail: territory membership, sharing sets / share groups for Experience Cloud users, manager groups, and the names of the sharing rules behind Rule share rows. These cases show up as Other mechanism or as raw share rows.
+1. Create a folder for it in the right category, e.g. `chrome-extensions/my-tool/`.
+2. Give it a `README.md` with what it does, how to install it, and its version.
+3. Add an entry to `tools.json`.
+4. Add a row to the table above.
+5. When it's ready to share, create a release tagged `my-tool@v1.0.0` and attach the zip.

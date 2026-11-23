@@ -14,7 +14,7 @@ The extension reuses the Salesforce session already open in your browser (the `s
 ## Install (unpacked)
 
 1. Open `chrome://extensions` (or `edge://extensions`) and turn on **Developer mode**.
-2. Click **Load unpacked** and select this `record-access-extension` folder.
+2. Click **Load unpacked** and select the `chrome-extensions/record-access-inspector` folder.
 3. Pin the extension.
 
 ## Use
